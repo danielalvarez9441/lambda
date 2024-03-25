@@ -1,0 +1,13 @@
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 300
+      MemorySize: 128
+      Handler: lambdafunction.StreamLambdaHandler
+      CodeUri: s3://bucketdaniellambdas/8f5a25541827a22f197fd7c00b8688ff
+      Runtime: java11
+      Architectures:
+      - x86_64
+    Metadata:
+      SamResourceId: Function

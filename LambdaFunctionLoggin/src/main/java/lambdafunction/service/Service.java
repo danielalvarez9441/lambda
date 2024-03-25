@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import lambdafunction.modelo.*;
 import lambdafunction.repository.PersitenciaDao;
 import lambdafunction.utilidades.ClienteSecretsManager;
+import lambdafunction.utilidades.JwtTokenProvider;
 import lambdafunction.utilidades.RestTemplateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -98,9 +99,10 @@ public class Service {
             inputUsuario.validarCorreo();
             UserCredentials userCredentials = new Gson().fromJson(ClienteSecretsManager.getSecret(), UserCredentials.class);
             Boolean respuesta = persitenciaDao.validar(inputUsuario, userCredentials);
-            //String token= JwtUtil.generateToken(inputUsuario.getCorreo(), userCredentials.getToken(),2l);
+             JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
+             String token  = jwtTokenProvider.generateToken();
             ResponseToken responseToken = new ResponseToken();
-            responseToken.setToken(respuesta ? "validado" : "No fue posible validar datos");
+            responseToken.setToken(respuesta ? token : "No fue posible validar datos");
             return new ResponseEntity<>( responseToken , respuesta ? HttpStatus.OK : HttpStatus.UNPROCESSABLE_ENTITY);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(NOOBLIGATORIOS);
